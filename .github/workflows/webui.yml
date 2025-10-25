@@ -9,16 +9,28 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-    - name: build
-      run: |
-        npm install
-        npm run build
+      # 拉取仓库
+      - uses: actions/checkout@v2
+
+      # 安装 Node.js
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # 安装依赖 & 构建
+      - name: Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      # 上传构建产物（dist/ 或 build/ 目录，根据项目实际目录修改）
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: smartdns-webui-build
+          path: |
+            ./
